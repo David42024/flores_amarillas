@@ -16,17 +16,29 @@ let Boton12 = document.getElementById("B12");
 const canvas = document.getElementById('Flor');
 const ctx = canvas.getContext('2d');
 
-// Resize canvas to fill the screen better
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
+let currentFlowerMode = 0;
 let animationId;
 let flowers = [];
 let frame = 0;
+
+// Resize canvas to fill the screen better
+function resizeCanvas() {
+    const florContainer = document.querySelector('.FlorContainer');
+    if (florContainer && getComputedStyle(document.querySelector('.Texto')).display !== 'none') {
+        canvas.width = florContainer.clientWidth;
+        canvas.height = florContainer.clientHeight * 0.8; // Dejar espacio para el texto "Para la niña..."
+    } else {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    
+    // Reposicionar y reescalar las flores automáticamente al cambiar de tamaño la pantalla
+    if (typeof rebuildFlowers === "function") {
+        rebuildFlowers();
+    }
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 // ── Math & Parametrics ──────────────────────────────────────────────────────
 function petal_x(angle, n, scale, twist=0) {
@@ -223,17 +235,54 @@ function animate() {
     animationId = requestAnimationFrame(animate);
 }
 
+// ── Responsive Scaling ──────────────────────────────────────────────────────
+function getResponsiveScale(baseScale) {
+    // Escala la flor con relación al ancho del canvas nuevo
+    return baseScale * Math.min(1.5, canvas.width / 500);
+}
+
+function rebuildFlowers() {
+    if (currentFlowerMode === 1) {
+        let currentScale = getResponsiveScale(1.0);
+        flowers = [
+            { x: canvas.width / 2, y: canvas.height / 2, scale: currentScale, offset: 0 }
+        ];
+    } else if (currentFlowerMode === 12) {
+        flowers = [];
+        
+        // Adaptar cuadrícula si es celular
+        const isMobile = window.innerWidth < 768; // punto de corte más seguro
+        const cols = isMobile ? 3 : 4; 
+        const rows = isMobile ? 4 : 3;
+
+        const padX = canvas.width / cols;
+        const padY = canvas.height / rows;
+        
+        let currentScale = getResponsiveScale(isMobile ? 0.45 : 0.35);
+
+        for (let i = 0; i < 12; i++) {
+            let col = i % cols;
+            let row = Math.floor(i / cols);
+            flowers.push({
+                x: padX * col + padX / 2,
+                y: padY * row + padY / 2,
+                scale: currentScale,
+                offset: i * 50 // offset phase so they look diverse
+            });
+        }
+    }
+}
+
 // ── Button Logic ────────────────────────────────────────────────────────────
 
 Boton1.addEventListener('click', function() {
     const ContenedorBotones = document.querySelector(".Con");
-    document.querySelector(".Texto").style.display = "block";
+    document.querySelector(".Texto").style.display = "flex"; // Se cambió a flex
     ContenedorBotones.style.display = "none";
     
-    // Add 1 large flower in center
-    flowers = [
-        { x: canvas.width / 2, y: canvas.height / 2, scale: 1.2, offset: 0 }
-    ];
+    currentFlowerMode = 1;
+    resizeCanvas(); // Fuerza a tomar el tamaño del contenedor recién visible, redimensiona y redespliega las flores
+
     if(animationId) cancelAnimationFrame(animationId);
     animate();
 
@@ -243,25 +292,10 @@ Boton1.addEventListener('click', function() {
 Boton12.addEventListener('click', function() {
     const ContenedorBotones = document.querySelector(".Con");
     ContenedorBotones.style.display = "none";
-    document.querySelector(".Texto").style.display = "block";
+    document.querySelector(".Texto").style.display = "flex"; // Se cambió a flex
     
-    // Setup 12 smaller flowers spread across the canvas
-    flowers = [];
-    const cols = 4;
-    const rows = 3;
-    const padX = canvas.width / cols;
-    const padY = canvas.height / rows;
-
-    for (let i = 0; i < 12; i++) {
-        let col = i % cols;
-        let row = Math.floor(i / cols);
-        flowers.push({
-            x: padX * col + padX / 2,
-            y: padY * row + padY / 2,
-            scale: 0.35, // smaller scale for multiple flowers
-            offset: i * 50 // offset phase so they look diverse
-        });
-    }
+    currentFlowerMode = 12;
+    resizeCanvas(); // Fuerza a tomar el tamaño del contenedor recién visible, redimensiona y redespliega las flores
 
     if(animationId) cancelAnimationFrame(animationId);
     animate();

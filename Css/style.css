@@ -7,7 +7,7 @@ body {
 
 h1 {
     text-align: center;
-    font-size: 50px;
+    font-size: clamp(28px, 5vw, 50px);
     padding: 0 20px;
     color: #ffb6c1;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -45,25 +45,54 @@ canvas {
 }
 
 /* -------------------------------------------
-   ESTILOS DE TUS FOTOS (Ajusta los tamaños aquí)
+   ESTILOS DEL CONTENEDOR FINAL
    ------------------------------------------- */
-.Fotos-Container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90vw; /* El ancho del contenedor (90% de la pantalla) empuja las fotos a los costados */
-    display: flex;
-    justify-content: space-between;
+.Texto {
+    display: none; /* Cambiado a flex desde app.js */
+    width: 100vw;
+    height: 100vh;
     align-items: center;
-    pointer-events: none; /* Permite que los clics pasen a través del contenedor vacío */
-    z-index: 5;
+    justify-content: space-around;
+    box-sizing: border-box;
+    padding: 20px;
+    z-index: 10;
+}
+
+.FotoContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.FlorContainer {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.FlorContainer h2 {
+    font-size: clamp(24px, 4vw, 40px);
+    color: #ffb6c1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#Flor {
+    width: 100%;
+    height: 80%;
 }
 
 .FotoPersonalizada {
     pointer-events: auto; /* Mantiene la interactividad en las fotos (como el zoom) */
-    width: 25vw; /* Tamaño de la foto basado en el ancho de pantalla (ajustable) */
-    max-width: 280px; 
+    width: 100%; 
+    max-width: 250px; 
     height: auto; 
     aspect-ratio: 4/5;
     object-fit: cover; /* Para que la foto no se deforme */
@@ -75,24 +104,6 @@ canvas {
 
 .FotoPersonalizada:hover {
     transform: scale(1.1); /* Zoom sutil al pasar el mouse */
-}
-
-.Texto {
-    display: none;
-    position: absolute;
-    top: 15%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    text-align: center;
-    z-index: 10;
-}
-
-.Texto h2 {
-    font-size: 40px;
-    color: #ffb6c1;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    text-align: center;
 }
 
 .Con {
@@ -183,11 +194,37 @@ canvas {
       }
 }
 
-@media (max-width: 468px) {
+@media (max-width: 768px) {
     body {
         background: linear-gradient(135deg, #1a0033, #4a004a, #200020);
     }
-    h1 {
-        font-size: 35px;
+    .Con {
+        flex-direction: column; /* Apila los botones en celular */
+        gap: 10px;
+    }
+    .Button {
+        font-size: 1rem;
+        padding: 12px 20px;
+        width: 90%; /* Botones más anchos en celular */
+    }
+    
+    .Texto {
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px;
+    }
+    .FotoContainer {
+        height: 25vh;
+        width: 100%;
+    }
+    .FlorContainer {
+        height: 45vh;
+        padding: 10px 0;
+    }
+    .FotoPersonalizada {
+        max-width: none;
+        width: auto;
+        height: 100%;
+        max-height: 200px;
     }
 }
