@@ -1,0 +1,193 @@
+body {
+    margin: 0;
+    font-family: 'Inclusive Sans', sans-serif;
+    background: linear-gradient(135deg, #1a0033, #4a004a, #200020); /* Dark purple background to make glowing flowers pop like in Python script */
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    font-size: 50px;
+    padding: 0 20px;
+    color: #ffb6c1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.Con-2 {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+canvas {
+    display: block;
+}
+
+.Contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+}
+
+.Con {
+    display: flex;
+    place-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
+/* -------------------------------------------
+   ESTILOS DE TUS FOTOS (Ajusta los tamaños aquí)
+   ------------------------------------------- */
+.Fotos-Container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw; /* El ancho del contenedor (90% de la pantalla) empuja las fotos a los costados */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none; /* Permite que los clics pasen a través del contenedor vacío */
+    z-index: 5;
+}
+
+.FotoPersonalizada {
+    pointer-events: auto; /* Mantiene la interactividad en las fotos (como el zoom) */
+    width: 25vw; /* Tamaño de la foto basado en el ancho de pantalla (ajustable) */
+    max-width: 280px; 
+    height: auto; 
+    aspect-ratio: 4/5;
+    object-fit: cover; /* Para que la foto no se deforme */
+    border-radius: 15px; /* Bordes redondeados */
+    border: 3px solid #ff66b2; /* Borde rosado */
+    box-shadow: 0 8px 30px rgba(255, 102, 178, 0.5); /* Resplandor */
+    transition: transform 0.3s ease;
+}
+
+.FotoPersonalizada:hover {
+    transform: scale(1.1); /* Zoom sutil al pasar el mouse */
+}
+
+.Texto {
+    display: none;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+.Texto h2 {
+    font-size: 40px;
+    color: #ffb6c1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.Con {
+    display: flex;
+    place-content: center;
+    align-items: center;
+    margin-top: 15px;
+    flex-wrap: wrap; /* allow wrapping if buttons are wide */
+    gap: 15px;
+}
+
+.Button{
+    font-family: 'Inclusive Sans', sans-serif;
+    font-size: 1.2rem;
+    transition-duration: 0.3s;
+    padding: 15px 25px;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #ff66b2, #9933ff);
+    color: white; 
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 102, 178, 0.4);
+    font-weight: bold;
+}
+  
+.Button:hover{
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 102, 178, 0.6);
+    background: linear-gradient(45deg, #ff80bf, #b266ff);
+}
+
+.Contenedor-Binicio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.Con-Emergente{
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+}
+
+.cua{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid #ff66b2;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(255, 102, 178, 0.3);
+    text-align: center;
+    color: white;
+    z-index: 100;
+    animation: aparecer 0.5s ease-out;
+}
+
+#res {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+@keyframes aparecer {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+    50% {
+      opacity: 0.5;
+      transform: translate(-50%, -55%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+}
+
+@media (max-width: 468px) {
+    body {
+        background: linear-gradient(135deg, #1a0033, #4a004a, #200020);
+    }
+    h1 {
+        font-size: 35px;
+    }
+}
