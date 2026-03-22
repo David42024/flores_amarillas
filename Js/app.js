@@ -140,16 +140,18 @@ for (let i = 0; i < STEPS_EXTRA; i++) {
 
 function dot(x, y, color, size=2) {
     ctx.fillStyle = color;
-    size = size * 1.8; // Hacer los puntos aún más grandes para máxima solidez
+    // Si son muchas flores saltamos muchos puntos, así que los hacemos más gruesos para compensar visualmente
+    size = currentFlowerMode === 12 ? size * 2.5 : size * 1.8; 
     ctx.fillRect(x - size/2, y - size/2, size, size);
 }
 
 function drawFlower(cx, cy, scale_global=1.0, f_offset=0) {
-    const ROT_SPEED = 0.015; // Más lento
-    const PULSE_SPEED = 0.04; // Más lento
-    const TWIST_SPEED = 0.02; // Más lento
-    const ORBIT_SPEED = 0.03; // Más lento
-    const COLOR_SPEED = 0.05; // Más lento
+    const isMany = currentFlowerMode === 12;
+    const ROT_SPEED = isMany ? 0.045 : 0.015; // 3 veces más rápido si son muchas
+    const PULSE_SPEED = isMany ? 0.12 : 0.04; 
+    const TWIST_SPEED = isMany ? 0.06 : 0.02; 
+    const ORBIT_SPEED = isMany ? 0.08 : 0.03; 
+    const COLOR_SPEED = isMany ? 0.15 : 0.05; 
 
     const f = frame + f_offset;
 
@@ -159,7 +161,8 @@ function drawFlower(cx, cy, scale_global=1.0, f_offset=0) {
     const orbit = f * ORBIT_SPEED;
     const cp = f * COLOR_SPEED;
 
-    const skip = 1; // dibujar todos los puntos (más sólido)
+    // Saltamos 4 veces más puntos para reducir radicalmente los cálculos y evitar tirones
+    const skip = isMany ? 5 : 1; 
 
     ctx.save();
     ctx.translate(cx, cy);
@@ -236,14 +239,18 @@ function animate() {
 }
 
 // ── Responsive Scaling ──────────────────────────────────────────────────────
-function getResponsiveScale(baseScale) {
-    // Escala la flor con relación al ancho del canvas nuevo
-    return baseScale * Math.min(1.5, canvas.width / 500);
+function getResponsiveScale(baseScale, referenceSize) {
+    // Escala la flor con relación a su espacio disponible (referenceSize)
+    // El diámetro virtual de la flor sin escalar es aprox 650
+    return baseScale * (referenceSize / 650);
 }
 
 function rebuildFlowers() {
     if (currentFlowerMode === 1) {
-        let currentScale = getResponsiveScale(1.0);
+        // Tomamos el lado más pequeño del canvas para que no se corte arriba ni a los lados
+        const minDim = Math.min(canvas.width, canvas.height);
+        let currentScale = getResponsiveScale(0.95, minDim); // 0.95 deja un pequeño margen para respirar
+        
         flowers = [
             { x: canvas.width / 2, y: canvas.height / 2, scale: currentScale, offset: 0 }
         ];
@@ -258,7 +265,11 @@ function rebuildFlowers() {
         const padX = canvas.width / cols;
         const padY = canvas.height / rows;
         
-        let currentScale = getResponsiveScale(isMobile ? 0.45 : 0.35);
+        // Para 12 flores, el espacio disponible es la cuadrícula (celda)
+        const cellMinDim = Math.min(padX, padY);
+        
+        // baseScale 0.85 las hace más grandes pero todavía deja un pequeño margen para que no choquen
+        let currentScale = getResponsiveScale(0.85, cellMinDim);
 
         for (let i = 0; i < 12; i++) {
             let col = i % cols;
