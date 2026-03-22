@@ -210,15 +210,20 @@ canvas {
     
     .Texto {
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start; /* Evita espacios vacíos innecesarios */
         padding: 10px;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto; /* Permite hacer scroll hacia abajo */
     }
     .FotoContainer {
-        height: 25vh;
+        height: auto; /* Que las fotos dicten su altura */
+        padding: 20px 0;
         width: 100%;
     }
     .FlorContainer {
-        height: 45vh;
+        height: auto; /* El canvas dicta la altura */
+        min-height: 50vh;
         padding: 10px 0;
     }
     .FotoPersonalizada {

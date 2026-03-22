@@ -26,7 +26,17 @@ function resizeCanvas() {
     const florContainer = document.querySelector('.FlorContainer');
     if (florContainer && getComputedStyle(document.querySelector('.Texto')).display !== 'none') {
         canvas.width = florContainer.clientWidth;
-        canvas.height = florContainer.clientHeight * 0.8; // Dejar espacio para el texto "Para la niña..."
+        
+        const isMobile = window.innerWidth < 768;
+        // Si estamos en celular y en modo 12 flores, queremos que las flores sean gigantes
+        // Haremos que la altura del canvas sea equivalente a 6 cuadrados perfectos hacia abajo
+        if (currentFlowerMode === 12 && isMobile) {
+            // 2 columnas, 6 filas -> cada casilla mide (width/2) de lado. 
+            // Altura total = (width/2) * 6 = width * 3
+            canvas.height = canvas.width * 3; 
+        } else {
+            canvas.height = florContainer.clientHeight * 0.8; // Dejar espacio para el texto "Para la niña..."
+        }
     } else {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
