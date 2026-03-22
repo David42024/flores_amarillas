@@ -210,26 +210,34 @@ canvas {
     
     .Texto {
         flex-direction: column;
-        justify-content: flex-start; /* Evita espacios vacíos innecesarios */
-        padding: 10px;
-        height: auto;
-        min-height: 100vh;
-        overflow-y: auto; /* Permite hacer scroll hacia abajo */
+        justify-content: flex-start; 
+        padding: 0;
+        height: 100vh;
+        min-height: 0;
+        overflow: hidden; /* Bloquear el scroll de toda la pantalla */
     }
     .FotoContainer {
-        height: auto; /* Que las fotos dicten su altura */
-        padding: 20px 0;
+        height: auto;
+        flex: 0 0 auto; /* Mantener fijo en pantalla */
+        padding: 10px 0;
         width: 100%;
+        z-index: 5;
     }
     .FlorContainer {
-        height: auto; /* El canvas dicta la altura */
-        min-height: 50vh;
+        flex: 1 1 auto; /* Ocupar el área restante */
+        height: auto; 
+        min-height: 0;
+        overflow-y: auto; /* Solo permite scroll en las flores */
         padding: 10px 0;
+        display: block; /* Cambio importante para que el scroll funcione al forzar la altura de la flor */
+    }
+    #Flor {
+        height: auto; /* Quita el límite del 80% para que el canvas fluya hacia abajo */
     }
     .FotoPersonalizada {
         max-width: none;
         width: auto;
-        height: 100%;
-        max-height: 200px;
+        height: 18vh;
+        max-height: 150px;
     }
 }
