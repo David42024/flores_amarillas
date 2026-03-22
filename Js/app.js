@@ -259,8 +259,8 @@ function rebuildFlowers() {
         
         // Adaptar cuadrícula si es celular
         const isMobile = window.innerWidth < 768; // punto de corte más seguro
-        const cols = isMobile ? 3 : 4; 
-        const rows = isMobile ? 4 : 3;
+        const cols = isMobile ? 2 : 4; 
+        const rows = isMobile ? 6 : 3;
 
         const padX = canvas.width / cols;
         const padY = canvas.height / rows;
